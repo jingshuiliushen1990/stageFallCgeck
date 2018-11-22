@@ -10,4 +10,30 @@ class commonBase(object):
         self.career = career
         self.gender = gender
 
+    def getCount(self):
+        return self.count
+
+    def setCount(self, newCount):
+        self.count = newCount
+
+    def getLv(self):
+        return self.lv
+
+    def setLv(self, newLv):
+        self.lv = newLv
+
+    def getCareer(self):
+        return self.career
+
+    def setCareer(self, newCareer):
+        self.career = newCareer
+
+    def getGender(self):
+        return self.gender
+
+    def setGender(self, newGender):
+        self.gender = newGender
+
+
+
 
