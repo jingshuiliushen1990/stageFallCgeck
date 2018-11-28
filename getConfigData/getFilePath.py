@@ -9,10 +9,9 @@ judgeList = ["AI_任务列表.xls", "CBT充值返还.xls", "C场景背景音效.
 def isRightFilePath(filePath):
     # 对于路径中有中文的可以用这种方式保证路径的正确，比较重要
     filePath = filePath.encode("gbk").decode("utf-8")
-    print("filepath = ", filePath)
 
-    filePath = filePath.replace('\\', "\\\\")
-    print("&&&&&&", filePath)
+    # filePath = filePath.replace('\\', "\\\\")
+    # print("&&&&&&", filePath)
     if ((filePath == None) or (filePath == '') or (not os.path.exists(filePath)) or
             (os.path.exists(filePath) and (not judgeFilePath(filePath)))):
         return False
@@ -36,4 +35,4 @@ def judgeFilePath(filePath):
 
 
 if __name__ == "__main__":
-    print(isRightFilePath("E:\M1_SVN\Market_build\lss\config\resource"))
+    print(isRightFilePath("E:\M1_SVN\Market_build\lss\config\\resource"))
