@@ -7,7 +7,7 @@ from future import standard_library
 from future.builtins import *
 #py3 compatibility
 
-import dataPreprocess.getFilePath
+import getConfigData.getFilePath
 import datetime
 import sys
 import hashlib
@@ -761,13 +761,78 @@ def remove_old_file(root):
             remove_old_file(path)
 
 
-# 获得所有excel表格得到的字典
-# def getAllExcelDictData():
-def getAllExcelDictData(iFilePath):
+# 获得所有excel表格得到的字典， 通过svn自动更新到最新的数据，并生成数据表
+def getAllSvnExcelDictData():
     print(" 程序正在执行中……………………")
 
-    # svnCommon()
-    # PATH = './resource/'
+    svnCommon()
+    PATH = '../resource/'
+
+    # PATH = iFilePath
+    # # 属不同的目录
+    # if is_client:
+    #     OUTPUT = 'lua_data_raw_c/'
+    # else:
+    #     OUTPUT = 'lua_data_raw_s/'
+    OUTPUT = "../testData/"
+    JSON = 'xls2lua_cache2.json'
+    JSON2 = 'lua_file_cache.json'
+    OUTPUT_KEYS = OUTPUT + JSON
+    lua_cache_path = OUTPUT + JSON2
+
+    try:
+        if exists(OUTPUT_KEYS):
+            f = open(OUTPUT_KEYS, 'r')
+            keys = json.loads(f.read(), strict=False)
+            f.close()
+
+        if exists(lua_cache_path):
+            f = open(lua_cache_path, 'r')
+            lua_file_caches = json.loads(f.read(), strict=False)
+            f.close()
+    except:
+        keys = {}
+        lua_file_caches = {}
+
+    #  所有导表的文件
+    file_names_ = {}
+    convet_enumerate(join(PATH, 'enumerate.xls'), PATH)
+    for name in listdir(PATH):
+        path = join(PATH, name)
+        if not isfile(path):
+            continue
+        convet_xls_file(path, OUTPUT, file_names_)
+
+    # print('-' * 40)
+    for name in listdir(PATH):
+        path = join(PATH, name)
+        if isfile(path) or name[0] == '.':
+            continue
+        file_names_ = {}
+        # print('分区表资源%s' % name)
+        for sub_name in listdir(path):
+            sub_path = join(path, sub_name)
+            if not isfile(sub_path):
+                continue
+            output = join(OUTPUT, name)
+            # cache_path = join(CACHE_PATH, name)
+            # print(sub_name)
+            convet_xls_file(sub_path, output, file_names_)
+        # print('-' * 20)
+
+    # open(OUTPUT_KEYS, 'w').write(json.dumps(tmp_keys).decode('utf-8'))
+    # open(lua_cache_path, 'w').write(json.dumps(lua_file_caches).decode('utf-8'))
+
+    # remove_old_file(OUTPUT)
+
+    # shutil.rmtree(OUTPUT)
+    # shutil.copytree(CACHE_PATH, OUTPUT)
+    # print("VVVVVVVVVVV", allExcelData)
+    return allExcelData
+
+# 获得所有excel表格得到的字典，通过配置的文件路径，读取对应路径的数据
+def getAllLocalExcelDictData(iFilePath):
+    print(" 程序正在执行中……………………")
 
     PATH = iFilePath
     # # 属不同的目录
@@ -856,7 +921,7 @@ def svnCommon():
 if __name__ == '__main__':
     start = datetime.datetime.now()
     # print("DDDDDDDD",getAllExcelDictData(dataPreprocess.getFilePath.getFilePath()))
-    getAllExcelDictData(dataPreprocess.getFilePath.getFilePath())
+    # getAllExcelDictData(getConfigData.getFilePath.getFilePath())
     end = datetime.datetime.now()
     print("执行需要的时间是 ： ", end - start)
 
