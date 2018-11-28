@@ -2,26 +2,21 @@
 
 import os
 
-judgeList = ["AI_任务列表.xls", "CBT充值返还.xls", "C场景背景音效.xls", "enumerate.xls", "C错误码.xls", "D道具获取指引.xls",
-             "D夺宝奇兵军衔.xls", "G公会-黑暗深渊.xls", "H魂卡秘境.xls","W物品背包定义.xls", "zhangjingwen"]
+judgeList = ["AI_任务列表.xls", "CBT充值返还.xls", "C场景背景音效.xls", "enumerate.xls", "C错误码.xls",
+             "D道具获取指引.xls", "H魂卡秘境.xls","W物品背包定义.xls", "zhangjingwen"]
 
 # 读取文件获得文件路径，对不正确的路径分别返回不同的结果
-def getFilePath():
-    path = open("../filePath.txt", 'r').read()
-    # path = open("./filePath.txt", 'r').read()
-    # print("path = ", path)
-    # filePath = unicode(path, "utf-8")
-
+def isRightFilePath(filePath):
     # 对于路径中有中文的可以用这种方式保证路径的正确，比较重要
-    filePath = path.encode("gbk").decode("utf-8")
-    # print("filepath = ", filePath)
+    filePath = filePath.encode("gbk").decode("utf-8")
+    print("filepath = ", filePath)
 
-    if (filePath == None) or (filePath == ''):
-        return -1
-    elif (not os.path.exists(filePath)):
-        return -2
-    elif (os.path.exists(filePath) and (not judgeFilePath(filePath))):
-        return -3
+    filePath = filePath.replace('\\', "\\\\")
+    print("&&&&&&", filePath)
+    if ((filePath == None) or (filePath == '') or (not os.path.exists(filePath)) or
+            (os.path.exists(filePath) and (not judgeFilePath(filePath)))):
+        return False
+
     else:
         if filePath.endswith('\\') or filePath.endswith('/'):
             return filePath
@@ -41,4 +36,4 @@ def judgeFilePath(filePath):
 
 
 if __name__ == "__main__":
-    print(getFilePath())
+    print(isRightFilePath("E:\M1_SVN\Market_build\lss\config\resource"))

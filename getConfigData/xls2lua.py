@@ -762,11 +762,11 @@ def remove_old_file(root):
 
 
 # 获得所有excel表格得到的字典， 通过svn自动更新到最新的数据，并生成数据表
-def getAllSvnExcelDictData():
+def getSvnExcelDictData():
     print(" 程序正在执行中……………………")
 
     svnCommon()
-    PATH = '../resource/'
+    PATH = './resource/'
 
     # PATH = iFilePath
     # # 属不同的目录
@@ -831,7 +831,7 @@ def getAllSvnExcelDictData():
     return allExcelData
 
 # 获得所有excel表格得到的字典，通过配置的文件路径，读取对应路径的数据
-def getAllLocalExcelDictData(iFilePath):
+def getLocalExcelDictData(iFilePath):
     print(" 程序正在执行中……………………")
 
     PATH = iFilePath
@@ -906,7 +906,7 @@ def svnSimpleExecute(command):
 def svnCommon():
     command1 = "svn checkout http://oa.ejoy.com/m1/p1/editor/config/resource"
     command2 = "svn cleanup"
-    command3 = "cd .."
+    command3 = "cd ../"
     try:
         svnSimpleExecute(command1)
     except:
@@ -915,13 +915,14 @@ def svnCommon():
         svnSimpleExecute(command1)
         svnSimpleExecute(command3)
     finally:
-        time.sleep(100)
+        time.sleep(50)
 
 
 if __name__ == '__main__':
     start = datetime.datetime.now()
-    # print("DDDDDDDD",getAllExcelDictData(dataPreprocess.getFilePath.getFilePath()))
-    # getAllExcelDictData(getConfigData.getFilePath.getFilePath())
+    filePath = "E:\M1_SVN\Market_build\lss\config\\resource\\"
+    print("**********",getLocalExcelDictData(filePath))
+    # print("$$$$$$$$$$$$", getSvnExcelDictData())
     end = datetime.datetime.now()
     print("执行需要的时间是 ： ", end - start)
 
