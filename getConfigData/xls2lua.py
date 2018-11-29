@@ -440,7 +440,7 @@ def sheet_to_dict(sheet):
                         list_name_len_tbl[name_num] = len(data[name])
         except:
             errorLog.write("@@@@@@@@@  WrongInfo: " + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '\n')
-            errorLog.write('ERROR: row: %s column: %s[%s]\n' % (rownum + 1, i, title_row[i]))
+            errorLog.write('ERROR: row: %s column: %s， 列名是： [%s]\n' % (rownum + 1, i, title_row[i]))
             # print(sys.stderr.write('ERROR: row: %s column: %s[%s]\n' % (rownum + 1, i, title_row[i])))
             # print >> sys.stderr.write('ERROR: row: %s column: %s[%s]\n' % (rownum + 1, i, title_row[i]))
             raise
@@ -464,7 +464,7 @@ def format_value(value):
             return form % value
     elif isinstance(value, bool):
         if value:
-            return "true";
+            return "true"
         else:
             return "false"
     elif isinstance(value, list):
