@@ -2,7 +2,7 @@
 
 from rwFile.getExcelData import *
 
-configData = getExcelData("config.xlsx")
+configData = getExcelData("../config.xlsx")
 
 class commonBase(object):
     """几个通用的属性，做成通用基类，便于其他父类继承"""

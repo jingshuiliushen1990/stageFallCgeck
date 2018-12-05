@@ -13,7 +13,7 @@ class getExcelData(object):
         self.excelName = excelName
 
     def createExcelObj(self):
-        filePath = "./"+str(self.excelName)
+        filePath = str(self.excelName)
         excelBook = xlrd.open_workbook(filePath)
         return excelBook
 
@@ -67,10 +67,10 @@ def joinElem2Url(ilist):
     urlAddr = ''
     for i in range(len(ilist)):
         if i == 0:
-            if ilist[i].endswith('/'):
+            if ilist[i].endswith(':'):
                 urlAddr += ilist[i]
             else:
-                urlAddr += ilist[i] + '/'
+                urlAddr += ilist[i] + ':'
         elif i == 1:
             urlAddr += str(int(ilist[i]))
         else:
