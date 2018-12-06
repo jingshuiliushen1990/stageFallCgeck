@@ -291,11 +291,14 @@ def checkEquipLocalQuality(equipQualityDict):
                 continue
         else:
             if not checkHeadWear(ivalue):
-                checkResult["不应该掉落头饰，但是掉落了："] = ivalue
+                checkResult["副本不应该掉落头饰，但是掉落了："] = ivalue
             else:
+                checkResult["副本没有掉落头饰，是正常的："] = {}
                 continue
     if tempResult:
         checkResult["装备掉落有问题，某个部位掉落数量为0，请检查："]= tempResult
+    else:
+        checkResult["单部位装备掉落没有问题，除头饰外各品质的都有掉落："] = {}
     return checkResult
 
 
@@ -381,10 +384,14 @@ def judgeWrongFall(iDict):
 
 
 def equipStageFallCheck(termList, allData):
+    newResult = {}
+    result = {}
+
     equipStageObj = equipStage(int(termList[0]), int(termList[1]), int(termList[3]), int(termList[4]),
                                int(termList[5]), int(termList[6]), termList[8], termList[9], termList[10])
+
     postmanData = equipStageObj.initPostmanData(allData)
-    result = {}
+
     careerCheck = checkEquipCarrer(postmanData, equipStageObj.getCareer())
     undefineGoidEquip = checkGoldEquip(postmanData)
     genderCheck = checkGender(postmanData, equipStageObj.getGender())
@@ -404,7 +411,6 @@ def equipStageFallCheck(termList, allData):
     result.update(judgeWrongFall(bugEquip))
     result.update(checkLocalEquipFall)
 
-    newResult = {}
     newResult[tuple(termList)] = result
 
     return newResult

@@ -86,12 +86,82 @@ def processTestData(allTermList, threadNum, allConfigData):
     return allResult
 
 
+# 测试一下顺序执行时的耗时，查看一下多线程的时间节省
+def test(allTermList, allConfigData):
+    allResult = {}
+    for i in allTermList:
+        allResult.update(findFunction(i, allConfigData))
+
+    print("########", allResult)
+    return allResult
+
+
+# 分类获得检查结果的key值，然后加到列表中
+def getKeyList(iDict):
+    keyList = []
+    for ikey, ivalue in iDict.items():
+        if ikey[0] in [1, 3]:
+            if ikey[1] not in keyList:
+                keyList.append(ikey[1])
+            else:
+                continue
+        if ikey[0] == 2:
+            newKey = str(ikey[1]) + "--" + str(ikey[2])
+            if newKey not in keyList:
+                keyList.append(newKey)
+            else:
+                continue
+        else:
+            if ikey[1] not in keyList:
+                keyList.append(ikey[1])
+    return keyList
+
+# 对得到的keyList 进行处理，然后得到一个{key1:{},key2:{},……}类型的字典
+def getKeyDict(iList):
+    keyDict = {}
+    for i in iList:
+        keyDict[i] = {}
+    return keyDict
+
+
+# 对结果进行预处理，便于发邮件和把结果写到excel文件中
+def initResultData(iDict):
+    newResult = {}
+    keyList = getKeyList(iDict)
+    keyDict = getKeyDict(keyList)
+    for ikey, ivalue in iDict.items():
+        temp = {}
+        temp[ikey] = ivalue
+        if ikey[0] in [1,3]:
+            keyDict[ikey[1]].update(temp)
+        elif ikey[0] == 2:
+            newkey = str(ikey[1])+"--"+ str(ikey[2])
+            keyDict[newkey].update(temp)
+        else:
+            keyDict[ikey[1]].update(temp)
+
+    for ikey1, ivalue1 in keyDict.items():
+        for ikey2, ivalue2 in ivalue1.items():
+            if ikey2[0] == 1:
+                newResult["装备秘境 "+str(ikey1)+" 的检查结果"] = ivalue1
+                continue
+            elif ikey2[0] == 2:
+                newResult["魂卡秘境 "+str(ikey1)+" 的检查结果"] = ivalue1
+                continue
+            elif ikey2[0] == 3:
+                newResult["普通副本 "+str(ikey1)+" 的检查结果"] = ivalue1
+                continue
+            else:
+                newResult["宝箱 "+str(ikey1)+" 的检查结果"] = ivalue1
+                continue
+
+    return newResult
+
+
+
 
 if __name__ == "__main__":
-    # print("%%%%%%%", constData)
-    # print("UUUUUUU", checkData)
-    # print("BBBBBBB", threadNum)
     processTestData(checkData, threadNum, allData)
-
+    # test(checkData, allData)
 
 
