@@ -55,12 +55,12 @@ class equipStage(commonBase):
     def getPostmanData(self):
         httpAddr = commonBase.getHttpAddr(self)
         try:
-            # print("@@@@@@@@", self.getPostmanKeyDict())
             postmanData = requests.post(httpAddr, data=self.getPostmanKeyDict())
             # print("**********", postmanData.text)
             return postmanData.text
         except:
             print("服务器连接不上，请检查连接！！！")
+            exit(0)
             return False
 
     def getUsefulPostmanData(self):
@@ -76,9 +76,9 @@ class equipStage(commonBase):
         result = {}
         tempData = self.getUsefulPostmanData()
         if tempData:
-            equipData = initEquipData(allData)
+            equipData1 = initEquipData(allData)
             for i in tempData:
-                checkResult = isEquip(equipData, i.get("id"))
+                checkResult = isEquip(equipData1, i.get("id"))
                 if checkResult:
                     tempResult = {}
                     tempResult["name"] = i.get("name")
@@ -87,7 +87,6 @@ class equipStage(commonBase):
                     result[i.get("id")] = tempResult
                 else:
                     continue
-            # print("$$$$$$$$$$$", result)
             return result
         return False
 
@@ -223,7 +222,6 @@ def getEquipQuality(handlePostmanData, playerLevel):
     bugEquip = {"low":[], "high":[]}     # 副本中掉落了低级的蓝紫装备时，副本中掉落了高级的蓝紫金红装备时，记录装备编号
 
     for ikey, ivalue in handlePostmanData.items():
-       # print("$$$$$$$$$$$$$$",ikey, ivalue)
        temp = ivalue.get("attribute", None)
        flag = isLowEquip(temp[4], playerLevel)
        if flag == 1:
@@ -405,9 +403,11 @@ def equipStageFallCheck(termList, allData):
     result.update(genderCheck)
     result.update(judgeWrongFall(bugEquip))
     result.update(checkLocalEquipFall)
-    print("MMMMMMMMMMM", result)
-    # print("KKKKKKKKK", postmanData)
-    return result
+
+    newResult = {}
+    newResult[tuple(termList)] = result
+
+    return newResult
 
 
 if __name__ == "__main__":
